@@ -30,7 +30,10 @@ describe('availableLengths / normalizeSettings', () => {
 describe('состояние игры', () => {
   it('настройки меняются до старта и не меняются после', () => {
     const before = initialState();
-    expect(updateSettings(before, { length: 5, base: 16 }).settings).toEqual({ length: 5, base: 16 });
+    expect(updateSettings(before, { length: 5, base: 16 }).settings).toEqual({
+      length: 5,
+      base: 16,
+    });
     const started = playing();
     expect(updateSettings(started, { length: 2, base: 2 })).toBe(started);
   });

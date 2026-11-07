@@ -3,7 +3,12 @@ import { isValidGuess } from './validation.js';
 import type { Attempt, Base, GameState, Settings } from './types.js';
 
 export const BASES: readonly Base[] = [2, 8, 10, 16];
-export const BASE_NAMES: Readonly<Record<Base, string>> = { 2: 'bin', 8: 'oct', 10: 'dec', 16: 'hex' };
+export const BASE_NAMES: Readonly<Record<Base, string>> = {
+  2: 'bin',
+  8: 'oct',
+  10: 'dec',
+  16: 'hex',
+};
 export const LENGTHS: readonly number[] = [2, 3, 4, 5, 6];
 
 export type GuessCheck = 'ok' | 'finished' | 'invalid' | 'repeat';

@@ -1,9 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { addRecord, parseRecords, recordFromState, serializeRecords, sortForDisplay } from './records.js';
+import {
+  addRecord,
+  parseRecords,
+  recordFromState,
+  serializeRecords,
+  sortForDisplay,
+} from './records.js';
 import { initialState, startGame, submitGuess, updateSettings } from './state.js';
 import type { GameRecord } from './types.js';
 
-const rec = (attempts: number, timeMs: number, length = 4, base: GameRecord['base'] = 10): GameRecord => ({
+const rec = (
+  attempts: number,
+  timeMs: number,
+  length = 4,
+  base: GameRecord['base'] = 10,
+): GameRecord => ({
   length,
   base,
   attempts,
@@ -27,7 +38,12 @@ describe('records', () => {
   it('хранит топ-N отдельно на каждую комбинацию length/base', () => {
     const start = [rec(9, 1, 4, 10), rec(8, 1, 4, 10), rec(7, 1, 2, 2)];
     const next = addRecord(start, rec(1, 1, 4, 10), 2);
-    expect(next.filter((r) => r.base === 10).map((r) => r.attempts).sort()).toEqual([1, 8]);
+    expect(
+      next
+        .filter((r) => r.base === 10)
+        .map((r) => r.attempts)
+        .sort(),
+    ).toEqual([1, 8]);
     expect(next.filter((r) => r.base === 2)).toHaveLength(1);
   });
 

@@ -32,9 +32,10 @@ document.body.append(app);
 
 const formatTime = (ms: number): string => `${(ms / 1000).toFixed(1)} с`;
 
-const MESSAGES: Readonly<Record<Exclude<GuessCheck, 'ok' | 'finished'>, (state: GameState) => string>> = {
-  invalid: ({ settings }) =>
-    `Нужно ${settings.length} разных цифр (${BASE_NAMES[settings.base]})`,
+const MESSAGES: Readonly<
+  Record<Exclude<GuessCheck, 'ok' | 'finished'>, (state: GameState) => string>
+> = {
+  invalid: ({ settings }) => `Нужно ${settings.length} разных цифр (${BASE_NAMES[settings.base]})`,
   repeat: () => 'Такая попытка уже была — введите другую',
 };
 
@@ -85,13 +86,17 @@ const submit = (): void => {
 
 // ---- вью ----
 const optionButton = (label: string, selected: boolean, disabled: boolean, onClick: () => void) =>
-  h('button', {
-    type: 'button',
-    class: selected ? 'option selected' : 'option',
-    'aria-pressed': String(selected),
-    disabled,
-    onclick: onClick,
-  }, label);
+  h(
+    'button',
+    {
+      type: 'button',
+      class: selected ? 'option selected' : 'option',
+      'aria-pressed': String(selected),
+      disabled,
+      onclick: onClick,
+    },
+    label,
+  );
 
 const settingsView = (): HTMLElement => {
   const locked = state.status !== 'settings';
@@ -102,17 +107,27 @@ const settingsView = (): HTMLElement => {
     'section',
     { class: 'panel' },
     h('h2', {}, 'Настройки'),
-    h('div', { class: 'row' },
+    h(
+      'div',
+      { class: 'row' },
       h('span', { class: 'label' }, 'Система счисления'),
       ...BASES.map((b) => optionButton(BASE_NAMES[b], b === base, locked, () => chooseBase(b))),
     ),
-    h('div', { class: 'row' },
+    h(
+      'div',
+      { class: 'row' },
       h('span', { class: 'label' }, 'Длина числа'),
       ...LENGTHS.map((l) =>
-        optionButton(String(l), l === length, locked || !lengths.includes(l), () => chooseLength(l)),
+        optionButton(String(l), l === length, locked || !lengths.includes(l), () =>
+          chooseLength(l),
+        ),
       ),
     ),
-    h('p', { class: 'hint' }, `Возможных секретных чисел: ${countPossibleSecrets(length, base).toLocaleString('ru-RU')}`),
+    h(
+      'p',
+      { class: 'hint' },
+      `Возможных секретных чисел: ${countPossibleSecrets(length, base).toLocaleString('ru-RU')}`,
+    ),
     locked
       ? h('button', { type: 'button', class: 'secondary', onclick: restart }, 'Новая игра')
       : h('button', { type: 'button', class: 'primary', onclick: start }, 'Начать игру'),
@@ -124,7 +139,9 @@ const historyView = (): HTMLElement =>
     'ol',
     { class: 'history', 'aria-label': 'История попыток' },
     ...state.history.map((attempt) =>
-      h('li', {},
+      h(
+        'li',
+        {},
         h('span', { class: 'guess' }, attempt.guess.toUpperCase()),
         h('span', { class: 'bulls' }, `Быки: ${attempt.bulls}`),
         h('span', { class: 'cows' }, `Коровы: ${attempt.cows}`),
@@ -166,11 +183,28 @@ const gameView = (): HTMLElement => {
     { class: 'panel' },
     h('h2', {}, 'Угадайте число'),
     h('div', { class: 'status' }, 'Время: ', timerEl, ` · Попыток: ${state.history.length}`),
-    h('div', { class: 'row' }, input, h('button', { type: 'button', class: 'primary', disabled: won, onclick: submit }, 'Проверить')),
+    h(
+      'div',
+      { class: 'row' },
+      input,
+      h(
+        'button',
+        { type: 'button', class: 'primary', disabled: won, onclick: submit },
+        'Проверить',
+      ),
+    ),
     h('p', { class: 'error', role: 'alert' }, message),
     won
-      ? h('p', { class: 'win' }, `Победа! Секрет ${state.secret.toUpperCase()}. Попыток: ${state.history.length}, время: ${formatTime(elapsedMs(state, 0))}`)
-      : h('p', { class: 'hint' }, `Допустимые символы: ${base === 16 ? '0–9, A–F' : `0–${base - 1}`}, без повторов`),
+      ? h(
+          'p',
+          { class: 'win' },
+          `Победа! Секрет ${state.secret.toUpperCase()}. Попыток: ${state.history.length}, время: ${formatTime(elapsedMs(state, 0))}`,
+        )
+      : h(
+          'p',
+          { class: 'hint' },
+          `Допустимые символы: ${base === 16 ? '0–9, A–F' : `0–${base - 1}`}, без повторов`,
+        ),
     historyView(),
   );
 };
@@ -183,9 +217,13 @@ const recordsView = (): HTMLElement => {
     h('h2', {}, 'Таблица рекордов'),
     rows.length === 0
       ? h('p', { class: 'hint' }, 'Пока пусто — выиграйте первую игру!')
-      : h('ol', { class: 'records' },
+      : h(
+          'ol',
+          { class: 'records' },
           ...rows.map((r) =>
-            h('li', {},
+            h(
+              'li',
+              {},
               h('span', { class: 'badge' }, `${r.length} · ${BASE_NAMES[r.base]}`),
               h('span', {}, `${r.attempts} попыт.`),
               h('span', {}, formatTime(r.timeMs)),
